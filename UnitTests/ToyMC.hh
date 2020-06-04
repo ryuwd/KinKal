@@ -184,6 +184,7 @@ namespace KKTest {
       dmvec *= dm*mom;
       endmom.SetCoordinates(endmom.Px()+dmvec.X(), endmom.Py()+dmvec.Y(), endmom.Pz()+dmvec.Z(),endmom.M());
     }
+    std::cout << "tstraw " << tstraw << ", pktraj range high: " << pktraj.range().high() << std::endl;
     // generate a new piece and append
     KTRAJ newend(endpos,endmom,endpiece.charge(),endpiece.bnom(),TRange(tstraw,pktraj.range().high()));
 //    if(newend.range().infinite()) newend.setRangeLH(tstraw,pktraj.range().high());
