@@ -48,5 +48,6 @@ fi
 # I don't know how to do that.
 export PYTHONDONTWRITEBYTECODE=1
 
-export ROOT_INC=${ROOTSYS}/include
+export ROOT_LIB=$(root-config --libdir)
+export ROOT_INC=$(root-config --incdir) #${ROOTSYS}/include
 export GCC_VERSION=`gcc -dumpversion | sed 's/\./_/g'`

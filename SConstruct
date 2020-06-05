@@ -14,6 +14,7 @@ from helpers import defineMergeFlags
 from helpers import defineExportedOSEnvironment
 from helpers import locateSConscriptFiles
 from helpers import dispatchSConscriptFiles
+from helpers import makeDirs
 
 # Classes
 from helpers import build_helper
@@ -37,7 +38,7 @@ bindir = buildBase+'/bin/'
 includePath = [ sourceRoot,
                 os.environ['ROOT_INC'] ]
 
-linkPath    = [ os.environ['ROOTSYS'] + '/lib',
+linkPath    = [ os.environ['ROOT_LIB'],
                 '#/lib'
               ]
 
@@ -74,6 +75,8 @@ Export('env')
 # Make an instance of the build_helper class and Export it.
 # This makes it Import-able by the SConscript files.
 Export('build_helper')
+
+makeDirs()
 
 # Walk the directory tree to locate all SConscript files.
 ss = locateSConscriptFiles(sourceRoot)

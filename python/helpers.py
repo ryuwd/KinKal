@@ -69,6 +69,10 @@ def validateEnvironment():
     if not 'BUILD_BASE' in os.environ:
         sys.exit('You have not specified BUILD_BASE for this build.\nExiting.')
 
+def makeDirs():
+    os.makedirs('lib/', exist_ok=True)
+    os.makedirs('bin/', exist_ok=True)
+
 # Check that the debug level is one of the known values
 def validateDebugLevel():
     level = os.environ['DEBUG_LEVEL']
