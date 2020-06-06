@@ -8,6 +8,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set (CMAKE_BUILD_TYPE Release)
 endif()
 
+message( "Build Type: ${CMAKE_BUILD_TYPE}" )
+
 project (KinKal)
 
 find_package(ROOT REQUIRED COMPONENTS Core RIO Net Hist Spectrum GenVector MLP Graf Graf3d Gpad Tree Rint Postscript Matrix Physics MathCore Thread Gui)
@@ -31,3 +33,5 @@ add_compile_options(-Wall -Wextra -Werror)
 add_subdirectory(MatEnv)
 add_subdirectory(KinKal)
 add_subdirectory(UnitTests)
+
+unset(CMAKE_BUILD_TYPE CACHE)
