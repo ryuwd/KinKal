@@ -3,10 +3,6 @@ cmake_minimum_required(VERSION 3.9.0)
 # always use gcc
 set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CXX_COMPILER "g++")
-# remove optimisations when in debug mode 
-
-set(DBG_FLAGS "-g -O0")
-set(PROF_FLAGS "-O3 -DNDEBUG") 
 
 if (NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -29,7 +25,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
-add_compile_options(-Wall -Wextra -Werror)
+add_compile_options("-Wall" "-Wextra" "-Werror" "$<$<CONFIG:DEBUG>:-g>" "$<$<CONFIG:DEBUG>:-O0>" "$<$<CONFIG:RELEASE>:-O3>" "$<$<CONFIG:RELEASE>:-DNDEBUG>")
 
 add_subdirectory(MatEnv)
 add_subdirectory(KinKal)
