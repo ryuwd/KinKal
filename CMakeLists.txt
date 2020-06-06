@@ -8,6 +8,10 @@ set(CMAKE_CXX_COMPILER "g++")
 set(DBG_FLAGS "-g -O0")
 set(PROF_FLAGS "-O3 -DNDEBUG") 
 
+if (NOT DEFINED CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
 message( "Build Type: ${CMAKE_BUILD_TYPE}" )
 
 project (KinKal CXX)
