@@ -5,8 +5,10 @@ set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CXX_COMPILER "g++")
 
 # remove optimisations when in debug mode 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 project (KinKal)
 
 find_package(ROOT REQUIRED COMPONENTS Core RIO Net Hist Spectrum GenVector MLP Graf Graf3d Gpad Tree Rint Postscript Matrix Physics MathCore Thread Gui)
