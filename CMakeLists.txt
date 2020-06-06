@@ -4,10 +4,13 @@ cmake_minimum_required(VERSION 3.9.0)
 set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CXX_COMPILER "g++")
 
-if (NOT DEFINED CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
 endif()
 
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 message( "Build Type: ${CMAKE_BUILD_TYPE}" )
 
 project (KinKal CXX)
@@ -23,9 +26,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-
-add_compile_options("-Wall" "-Wextra" "-Werror" "$<$<CONFIG:DEBUG>:-g>" "$<$<CONFIG:DEBUG>:-O0>" "$<$<CONFIG:RELEASE>:-O3>" "$<$<CONFIG:RELEASE>:-DNDEBUG>")
 
 add_subdirectory(MatEnv)
 add_subdirectory(KinKal)
