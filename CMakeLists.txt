@@ -5,11 +5,8 @@ set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CXX_COMPILER "g++")
 # remove optimisations when in debug mode 
 
-if (NOT CMAKE_BUILD_TYPE)
-    set (CMAKE_BUILD_TYPE Release)
-endif()
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0" CACHE STRING "" FORCE)
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE STRING "" FORCE) 
+set(DBG_FLAGS "-g -O0")
+set(PROF_FLAGS "-O3 -DNDEBUG") 
 
 message( "Build Type: ${CMAKE_BUILD_TYPE}" )
 
