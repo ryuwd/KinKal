@@ -1,5 +1,5 @@
 
-include(CTest)
+enable_testing()
 
 # generate root dictionary
 ROOT_GENERATE_DICTIONARY(G__Dict KKHitInfo.hh NOINSTALL
