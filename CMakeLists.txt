@@ -5,7 +5,7 @@ set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CXX_COMPILER "g++")
 
 # enable c++17 standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wno-unused-parameter -Wno-unused-local-typedefs -Werror -gdwarf-2 -Werror=return-type -Winit-self -Woverloaded-virtual -ftrapping-math"
