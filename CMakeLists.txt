@@ -41,9 +41,3 @@ add_subdirectory(MatEnv)
 add_subdirectory(KinKal)
 add_subdirectory(UnitTests)
 
-install( 
-  TARGETS MatEnv KinKal
-  RUNTIME DESTINATION bin/
-  LIBRARY DESTINATION lib/
-  ARCHIVE DESTINATION lib/
-)
