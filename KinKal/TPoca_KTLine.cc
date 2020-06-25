@@ -32,7 +32,7 @@ namespace KinKal {
     if(hint.sensorHint_)
       stoca = hint.sensorToca_;
     else
-      stoca= tline.t0();
+      stoca= ktline.t0();
 
     // use successive linear approximation until desired precision on DOCA is met.
     double dptoca(std::numeric_limits<double>::max()), dstoca(std::numeric_limits<double>::max());
@@ -41,8 +41,10 @@ namespace KinKal {
     double doca(0.0);
     static const unsigned maxiter=100;
     unsigned niter(0);
+
     // ktline speed doesn't change
-    double ktspeed = ktline.speed(ktline.t0());
+    double ktspeed = ktline.speed();
+
     cout<<"KTLineSpeed "<<ktspeed<<endl;
     Vec3 ktdir;
     while((fabs(dptoca) > precision_ || fabs(dptoca) > precision_  )&& niter++ < maxiter) {
@@ -137,9 +139,12 @@ namespace KinKal {
   }
 
    // specialization between a piecewise KTLine and a line
-  typedef PKTraj<KTLine> PKTLINE;
-  template<> TPoca<PKTLINE,TLine>::TPoca(PKTLINE const& pktline, TLine const& tline, TPocaHint const& hint, double precision) : TPocaBase(precision), ktraj_(&pktline), straj_(&tline)  {
+  typedef PKTraj<KTLine> PKTLine;
+  template<> TPoca<PKTLine,TLine>::TPoca(PKTLine const& pktline, TLine const& tline, TPocaHint const& hint, double precision) : TPocaBase(precision), ktraj_(&pktline), straj_(&tline)  {
     // iteratively find the nearest piece, and POCA for that piece.  Start at hints if availalble, otherwise the middle
+
+    std::cout << "Inside specialisation TPoca<PKTraj<KTLine>, TLine>" << std::endl;
+
     static const unsigned maxiter=10; // don't allow infinite iteration.  This should be a parameter FIXME!
     unsigned niter=0;
     size_t oldindex= pktline.pieces().size(); //TODO --->do we want piecewise line fit?

@@ -109,6 +109,8 @@ namespace KinKal {
   // specialization between a piecewise LHelix and a line
   typedef PKTraj<LHelix> PLHELIX;
   template<> TPoca<PLHELIX,TLine>::TPoca(PLHELIX const& phelix, TLine const& tline, TPocaHint const& hint, double precision) : TPocaBase(precision), ktraj_(&phelix), straj_(&tline)  {
+        std::cout << "Inside specialisation TPoca<PKTraj<LHelix>, TLine>" << std::endl;
+
     // iteratively find the nearest piece, and POCA for that piece.  Start at hints if availalble, otherwise the middle
     static const unsigned maxiter=10; // don't allow infinite iteration.  This should be a parameter FIXME!
     unsigned niter=0;
