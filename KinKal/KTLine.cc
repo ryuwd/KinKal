@@ -46,7 +46,7 @@ string const &KTLine::trajName() { return trajName_; }
 KTLine::KTLine(Vec4 const &pos0, Vec3 const &svel, TRange const &range,
                bool forcerange)
     : KTLine(pos0.Vect(), svel, pos0.T(), range, forcerange) {
-  std::cout << " KTLine Constructor 1 " << trange_ << std::endl;
+  //std::cout << " KTLine Constructor 1 " << trange_ << std::endl;
 }
 
 KTLine::KTLine(Vec3 const &pos0, Vec3 const &svel, double tmeas,
@@ -60,7 +60,7 @@ KTLine::KTLine(Vec3 const &pos0, Vec3 const &svel, double tmeas,
   param(phi0_) = atan2(pos0_.Y(), pos0_.X());
   param(z0_) = pos0_.Z();
   param(t0_) = tmeas;
-  cout << "In KTLine. Params set to: " << pars_.parameters() << endl;
+  //cout << "In KTLine. Params set to: " << pars_.parameters() << endl;
 }
 
 /*
@@ -72,7 +72,6 @@ can initialize the line with an origin (pos0) or the trajectory parameters
 KTLine::KTLine(Vec4 const &pos0, Mom4 const &mom0, int charge, double bnom,
                TRange const &range)
     : KTLine(pos0, mom0, charge, Vec3(0.0, 0.0, bnom), range) {
-  std::cout << " KT Constructor 1 " << endl;
 }
 
 KTLine::KTLine(Vec4 const &pos40, Mom4 const &mom0, int charge,
@@ -85,23 +84,17 @@ KTLine::KTLine(Vec4 const &pos40, Mom4 const &mom0, int charge,
   charge_ = charge;
 
   mass_ = mom0.M();
-  std::cout << "Constructing KT : "
-            << "Mom " << this->mom_ << " Pos " << this->pos0_ << std::endl;
-  std::cout << "Constructed with: "
-            << "pdata " << pars_.parameters() << std::endl;
 }
 
 KTLine::KTLine(PDATA const &pdata, double mass, int charge, double bnom,
                TRange const &range)
     : KTLine(pdata, mass, charge, Vec3(0.0, 0.0, bnom), range) {
-  std::cout << " KT Constructor 3 " << endl;
 }
 
 KTLine::KTLine(PDATA const &pdata, double mass, int charge, Vec3 const &bnom,
                TRange const &range)
     : KTLine(pdata.parameters(), pdata.covariance(), mass, charge, bnom,
              range) {
-  std::cout << " KT Constructor 4 " << endl;
 }
 
 KTLine::KTLine(PDATA::DVEC const &pvec, PDATA::DMAT const &pcov, double mass,
@@ -110,16 +103,10 @@ KTLine::KTLine(PDATA::DVEC const &pvec, PDATA::DMAT const &pcov, double mass,
   bnom_ = bnom;
   mass_ = mass;
   charge_ = charge;
-  std::cout << " KT Constructor 5 " << endl;
 }
 
 KTLine::KTLine(PDATA const &pdata, KTLine const &other) : KTLine(other) {
   pars_ = pdata;
-  // TODO  in this constructor you save the pos0 and mom of the "other" yet you
-  // have aprameters from pdata - is this consistant??? Surely you will end up
-  // with unphysical results.
-  std::cout << "KT Constructor 6 "
-            << "pdata " << pdata.parameters() << std::endl;
 }
 
 void KTLine::position(Vec4 &pos) const {
@@ -194,7 +181,7 @@ KTLine::DVEC KTLine::momDeriv(double time, LocalBasis::LocDir mdir) const {
   double vz = CLHEP::c_light * mom().z() / mom().E();
   double l = speed() * time;
   KTLine::DVEC pder;
-  cout << "Mom deriv start params " << pder << endl;
+  //cout << "Mom deriv start params " << pder << endl;
   // cases
   switch (mdir) {
   case LocalBasis::perpdir:
@@ -204,7 +191,7 @@ KTLine::DVEC KTLine::momDeriv(double time, LocalBasis::LocDir mdir) const {
     pder[phi0_] = 0;
     pder[z0_] = l * cosTheta(); // alt dir =-l*cosTheta();
     pder[t0_] = pder[z0_] / vz;
-    cout << "Mom deriv perpdir params " << pder << endl;
+    //cout << "Mom deriv perpdir params " << pder << endl;
     break;
   case LocalBasis::phidir:
     // change in dP/dtheta1 = dP/dphi0*(-1/sintheta)
@@ -214,7 +201,7 @@ KTLine::DVEC KTLine::momDeriv(double time, LocalBasis::LocDir mdir) const {
     pder[z0_] = d0() / (sinTheta() *
                         tanTheta()); // alt dir = -d0()/(sinTheta()*tanTheta());
     pder[t0_] = pder[z0_] / vz;
-    cout << "Mom deriv phidir params " << pder << endl;
+    //cout << "Mom deriv phidir params " << pder << endl;
     break;
   case LocalBasis::momdir:
     pder[cost_] = 0;
@@ -222,7 +209,7 @@ KTLine::DVEC KTLine::momDeriv(double time, LocalBasis::LocDir mdir) const {
     pder[phi0_] = 0;
     pder[z0_] = 0;
     pder[t0_] = pder[z0_] / vz;
-    cout << "Mom deriv momdir params " << pder << endl;
+    //cout << "Mom deriv momdir params " << pder << endl;
     break;
 
   default:

@@ -22,7 +22,6 @@ template <>
 TPoca<KTLine, TLine>::TPoca(KTLine const &ktline, TLine const &tline,
                             TPocaHint const &hint, double precision)
     : TPocaBase(precision), ktraj_(&ktline), straj_(&tline) {
-  cout << "START" << ktline.params() << endl;
   // reset status
   reset();
   double htoca, stoca;
@@ -49,10 +48,7 @@ TPoca<KTLine, TLine>::TPoca(KTLine const &ktline, TLine const &tline,
   // ktline speed doesn't change
   double ktspeed = ktline.speed();
 
-  cout << "KTLineSpeed " << ktspeed << endl;
   Vec3 ktdir;
-
-  cout << "precision is " << precision_ << std::endl;
 
   // iterate until change in TOCA less than precision
   while ((fabs(dptoca) > precision_ || fabs(dptoca) > precision_) &&
@@ -62,17 +58,11 @@ TPoca<KTLine, TLine>::TPoca(KTLine const &ktline, TLine const &tline,
     ktdir = ktline.direction(htoca); //,ktdir);
     auto dpos = tline.pos0() - ktpos;
 
-    cout << "KT Position TPOCA " << ktpos << endl;
-    cout << "KT Direction TPOCA " << ktdir << endl;
-    cout << "KT dpos " << dpos << endl;
-
     // dot products
     double ddot = tline.dir().Dot(ktdir);
     double denom = 1.0 - ddot * ddot;
-    cout << " dnemo " << ddot << " " << tline.dir() << " " << denom << endl;
     // check for parallel
     if (denom < 1.0e-5) {
-      cout << "Failed to converge TPOCA " << endl;
       status_ = TPoca::pocafailed;
       break;
     }
@@ -82,26 +72,22 @@ TPoca<KTLine, TLine>::TPoca(KTLine const &ktline, TLine const &tline,
 
     // compute length from expansion point to POCA and convert to times
     dptoca = (ktdd - ldd * ddot) / (denom * ktspeed);
-    std::cout << ktdd << " " << ldd << " " << ddot << " " << ktspeed << " "
-              << denom << " " << (ktdd - ldd * ddot) / (denom * ktspeed)
-              << std::endl;
-    std::cout << " dptoca " << dptoca << std::endl;
+    // std::cout << ktdd << " " << ldd << " " << ddot << " " << ktspeed << " "
+    //           << denom << " " << (ktdd - ldd * ddot) / (denom * ktspeed)
+    //           << std::endl;
+    // std::cout << " dptoca " << dptoca << std::endl;
     dstoca =
         tline.t0() + (ktdd * ddot - ldd) / (denom * tline.speed(stoca)) - stoca;
     htoca += dptoca; // ktline time is iterative
     stoca += dstoca; // line time is always WRT t0, since it uses p0
-    std::cout << " tocas " << dstoca << " " << dptoca << " " << htoca << " "
-              << stoca << std::endl;
+    // std::cout << " tocas " << dstoca << " " << dptoca << " " << htoca << " "
+    //           << stoca << std::endl;
 
     // compute DOCA
-    cout << " ktline " << ktline.t0() << endl;
     ktpos = ktline.position(htoca);
-    cout << "line " << tline.t0() << endl;
     Vec3 lpos = tline.position(stoca);
     double dd2 = (ktpos - lpos).Mag2();
-    std::cout << "dd2 " << dd2 << std::endl;
     if (dd2 < 0.0) {
-      std::cout << "tpoca failed 2 " << std::endl;
       status_ = TPoca::pocafailed;
       break;
     }
@@ -142,17 +128,13 @@ TPoca<KTLine, TLine>::TPoca(KTLine const &ktline, TLine const &tline,
     // derviatives of TOCA and DOCA WRT particle trajectory parameters
     // no t0 dependence, DOCA is purely geometric
 
-    // calculated these using BTrk instances - doc db ref ###
-    dDdP_[KTLine::phi0_] =
-        dsign * (ktline.d0() * sin(ktline.phi0()) * ddir.x() +
-                  ktline.d0() * cos(ktline.phi0()) * ddir.y());
-    dDdP_[KTLine::cost_] = 0;
-    dDdP_[KTLine::d0_] = dsign * (-1 * cos(ktline.phi0()) * ddir.x() +
-                                   sin(ktline.phi0()) * ddir.y());
-    dDdP_[KTLine::z0_] = dsign * ddir.z();
-    cout << "dDdP+ " << dDdP_ << endl;
-    // no spatial dependence, DT is purely temporal
-    dTdP_[KTLine::t0_] = -1.0; // time is 100% correlated
+      //calculated these using BTrk instances - doc db ref ###
+      dDdP_[KTLine::phi0_] = -dsign*(ktline.d0()*sin(ktline.phi0())*ddir.x()+ktline.d0()*cos(ktline.phi0())*ddir.y());
+      dDdP_[KTLine::cost_] = 0;
+      dDdP_[KTLine::d0_] = -dsign*(-1*cos(ktline.phi0())*ddir.x()+sin(ktline.phi0())*ddir.y());
+      dDdP_[KTLine::z0_] = -dsign*ddir.z();
+      // no spatial dependence, DT is purely temporal
+      dTdP_[KTLine::t0_] = 1.0; // time is 100% correlated
 
     // propagate parameter covariance to variance on doca and toca
     docavar_ = ROOT::Math::Similarity(dDdP(), ktline.params().covariance());
@@ -160,7 +142,6 @@ TPoca<KTLine, TLine>::TPoca(KTLine const &ktline, TLine const &tline,
     // dot product between directions at POCA
 
     ddot_ = ktline.direction(particleToca()).Dot(tline.direction(sensorToca()));
-    cout << "ddot END " << ddot_ << endl;
   }
 }
 
@@ -172,9 +153,6 @@ TPoca<PKTLine, TLine>::TPoca(PKTLine const &pktline, TLine const &tline,
     : TPocaBase(precision), ktraj_(&pktline), straj_(&tline) {
   // iteratively find the nearest piece, and POCA for that piece.  Start at
   // hints if availalble, otherwise the middle
-
-  std::cout << "Inside specialisation TPoca<PKTraj<KTLine>, TLine>"
-            << std::endl;
 
   static const unsigned maxiter =
       10; // don't allow infinite iteration.  This should be a parameter FIXME!

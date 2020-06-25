@@ -73,7 +73,6 @@ public:
   //    TLine(PDATA const& pdata) : pars_(pdata){std::cout<<" T Constructor 3
   //    "<<pdata<<std::endl;  };
   KTLine(PDATA::DVEC const &pvec, PDATA::DMAT const &pcov) : pars_(pvec, pcov) {
-    std::cout << " T Constructor 4 " << std::endl;
   };
 
   virtual ~KTLine() {}
@@ -113,12 +112,10 @@ public:
 
   TRange const &range() const { return trange_; }
   TRange &range() {
-    std::cout << "Accessing TRange&  " << trange_ << std::endl;
     return trange_;
   }
   virtual void setRange(TRange const &trange) {
     trange_ = trange;
-    std::cout << "Setting TRange to " << trange_ << std::endl;
   }
   bool inRange(double time) const { return trange_.inRange(time); }
 
@@ -150,7 +147,6 @@ public:
   } // time to travel Z
 
   int charge() const {
-    std::cout << charge_ << std::endl;
     return charge_;
   }
   double beta() const { return (speed() / CLHEP::c_light); }
