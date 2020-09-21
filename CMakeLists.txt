@@ -135,9 +135,17 @@ add_subdirectory(UnitTests)
 # install rules
 include(GNUInstallDirs)
 
+# install shared libraries
 install(TARGETS KinKal MatEnv
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# Globbing here is fine because it does not influence build behaviour
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/"
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING 
+        PATTERN "*.hh" 
+)
 
 message (STATUS "Writing setup.sh...")
 
